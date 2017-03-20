@@ -17,13 +17,13 @@ namespace OOP
     {
 
         // Properties
-        
+
 
         private Player.Player _player; //  Player Object
         public int positionWalked = 0;
         private Reward _rewards; // reward object
         private EasyMonster ezMonster = new EasyMonster();
-        private Combat combatMode;      
+        private Combat combatMode;
 
 
         public ClickAdventureBase()
@@ -34,7 +34,7 @@ namespace OOP
 
 
             // Setting default value
-            _player = new Player.Player(); 
+            _player = new Player.Player();
             _player.CurrentHitPoints = 50;
             _player.MaximumHitPoints = 50;
             _player.Gold = 20;
@@ -52,59 +52,59 @@ namespace OOP
             lblLevel.Text = _player.Level.ToString();
             lblWalk.Text = _player.WalkedAmount.ToString();
 
-            mainTextBox.Text = "Welcome to the ultimate experience in Click Adventure RPG" + "\n" 
+            mainTextBox.Text = "Welcome to the ultimate experience in Click Adventure RPG" + "\n"
                 + "This is how you play:" + "\n"
                 + "- Click" + "\n"
-                + "-  Win" ;
-            
+                + "-  Win";
+
 
 
         }
-        
+
         //Walkbutton
         private void button1_Click(object sender, EventArgs e)
         {
             Console.WriteLine(positionWalked);
             int questHack = positionWalked - 1;
-        // questGiver;
-        // questText;
-        // questName;
-        // questId;
+            // questGiver;
+            // questText;
+            // questName;
+            // questId;
 
             lblWalk.Text = "You moved to position: " + ++positionWalked;
             //if (questHack < Quest.quests.Count)
             //{
             //    mainTextBox.Text = Quest.quests[questHack].questText;
             //}
-            
-            
-                if (positionWalked % 4 == 0)
-                {
-                combatMode = new Combat(ezMonster, _player);               
-                mainTextBox.Text = "You stumbled on a creature! Fight!" + "\n" + "\n" + "Monster HP: " 
+
+
+            if (positionWalked % 4 == 0)
+            {
+                combatMode = new Combat(ezMonster, _player);
+                mainTextBox.Text = "You stumbled on a creature! Fight!" + "\n" + "\n" + "Monster HP: "
                     + ezMonster.HealthPoints.ToString() + "\n"
                     + "Monster Armor: " + ezMonster.Armor.ToString() + "\n"
                     + "Monster Damage: " + ezMonster.AttackDamage.ToString();
-                    
-                    attackButton.Visible = true;            
-                    defendButton.Visible = true;
-                    
 
-                }
-                else
-                {
-                    mainTextBox.Text = "";
-                    attackButton.Visible = false;
-                    defendButton.Visible = false;
-                }
+                attackButton.Visible = true;
+                defendButton.Visible = true;
+
+
             }
+            else
+            {
+                mainTextBox.Text = "";
+                attackButton.Visible = false;
+                defendButton.Visible = false;
+            }
+        }
 
-            
 
-        
 
-        
-        
+
+
+
+
 
 
         private void attackButton_Click(object sender, EventArgs e)
@@ -116,18 +116,37 @@ namespace OOP
                 {
                     damageTaken = ezMonster.AttackDamage - _player.Armor;
                 }
-                
+
                 combatLabel.Text = "You smashed the monster for " + (_player.AttackDamage - ezMonster.Armor).ToString() + "\n"
                 + "The monster hit you for " + damageTaken.ToString();
                 combatMode.Attack();
                 lblHitPoints.Text = (_player.CurrentHitPoints - damageTaken).ToString();
-                    
+                mainTextBox.Text = "Monster HP: "
+                    + ezMonster.HealthPoints.ToString() + "\n"
+                    + "Monster Armor: " + ezMonster.Armor.ToString() + "\n"
+                    + "Monster Damage: " + ezMonster.AttackDamage.ToString();
+
+                //if (ezMonster.HealthPoints <= 0)
+                //{
+                //    combatLabel.Text = "Congrats You won!" + "\n"
+                //        + _rewards.goldReward + " added " + " and" + _rewards.expReward + " added ";
+                //}
+                int damageGiven = 0;
+                if (_player.AttackDamage - ezMonster.Armor > 0)
+                {
+                    damageGiven = _player.AttackDamage - ezMonster.Armor;
+                }
+                // combatLabel.Text = damageGiven.ToString(); fungerar, visar korrekt dmg.
+
+
             }
         }
 
+
         private void defendButton_Click(object sender, EventArgs e)
         {
-            
+
         }
     }
 }
+
