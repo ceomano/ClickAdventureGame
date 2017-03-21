@@ -10,8 +10,9 @@ namespace OOP.Logic
     {
         private Player.Player player;
         private Creatures.Creatures creature;
+        
 
-        public void setPlayer(Player.Player p)            
+        public void setPlayer(Player.Player p)
         {
             this.player = p;
         }
@@ -23,19 +24,18 @@ namespace OOP.Logic
         public void Attack()
         {
             int attackDamage = this.player.AttackDamage - this.creature.Armor > 0 ? this.player.AttackDamage - this.creature.Armor : 0;
-            this.creature.HealthPoints -= attackDamage;  
+            this.creature.HealthPoints -= attackDamage;
 
             if (this.creature.HealthPoints > 0)
             {
                 attackDamage = this.creature.AttackDamage - this.player.Armor > 0 ? this.creature.AttackDamage - this.player.Armor : 0;
                 this.player.CurrentHitPoints -= attackDamage;
-            }            
+            }
         }
 
         public void Defend()
         {
-            int attackDamage = this.creature.AttackDamage - (this.player.Armor + 2) > 0 ? this.creature.AttackDamage - (this.player.Armor + 2 ) : 0;
-            this.player.CurrentHitPoints -= attackDamage;
+            
         }
 
         public Combat(Creatures.Creatures c, Player.Player p)
@@ -43,6 +43,8 @@ namespace OOP.Logic
             this.creature = c;
             this.player = p;
             
+
+
         }
         public Combat()
         {
@@ -51,16 +53,16 @@ namespace OOP.Logic
 
         public string CheckVictory()
         {
-            if(this.player.CurrentHitPoints > 0 && this.creature.HealthPoints <= 0)
+            if (this.player.CurrentHitPoints > 0 && this.creature.HealthPoints <= 0)
             {
                 return "Congrats, you won.";
             }
-            else if(this.player.CurrentHitPoints <= 0)
+            else if (this.player.CurrentHitPoints <= 0)
             {
                 return "You lost, ggwp.";
             }
             return ""; // Still going.
         }
-     // Doot - jora
+        // Doot - jora
     }
 }

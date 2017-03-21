@@ -22,9 +22,8 @@ namespace OOP
         private Player.Player _player; //  Player Object
         public int positionWalked = 0;
         private Reward _rewards; // reward object
-        private EasyMonster ezMonster = new EasyMonster();
+        private Creatures.Creatures creature;
         private Combat combatMode;
-
 
         public ClickAdventureBase()
 
@@ -57,21 +56,20 @@ namespace OOP
                 + "- Click" + "\n"
                 + "-  Win";
 
-
-
         }
 
         //Walkbutton
         private void button1_Click(object sender, EventArgs e)
         {
-            Console.WriteLine(positionWalked);
-            int questHack = positionWalked - 1;
+            //int questHack = positionWalked - 1;
+            combatLabel.Text = "";
             // questGiver;
             // questText;
             // questName;
             // questId;
 
             lblWalk.Text = "You moved to position: " + ++positionWalked;
+            Console.WriteLine(positionWalked);
             //if (questHack < Quest.quests.Count)
             //{
             //    mainTextBox.Text = Quest.quests[questHack].questText;
@@ -80,11 +78,10 @@ namespace OOP
 
             if (positionWalked % 4 == 0)
             {
-                combatMode = new Combat(ezMonster, _player);
-                mainTextBox.Text = "You stumbled on a creature! Fight!" + "\n" + "\n" + "Monster HP: "
-                    + ezMonster.HealthPoints.ToString() + "\n"
-                    + "Monster Armor: " + ezMonster.Armor.ToString() + "\n"
-                    + "Monster Damage: " + ezMonster.AttackDamage.ToString();
+                creature = new EasyMonster();
+                combatMode = new Combat(creature, _player);
+                RenderEnemyText();
+                //UpdateLabels();
 
                 attackButton.Visible = true;
                 defendButton.Visible = true;
@@ -98,55 +95,65 @@ namespace OOP
                 defendButton.Visible = false;
             }
         }
-
-
-
-
-
-
-
-
+        
 
         private void attackButton_Click(object sender, EventArgs e)
         {
-            if (positionWalked % 4 == 0)
+            combatMode.Attack();
+
+            //int damageTaken = creature.AttackDamage - _player.Armor + 1 > 0 ? creature.AttackDamage - _player.Armor : 0;
+            //int damageGiven = _player.AttackDamage - creature.Armor > 0 ? _player.AttackDamage - creature.Armor : 0;
+
+            int damageTaken = 0;
+            if (creature.AttackDamage - _player.Armor > 0)
             {
-                int damageTaken = 0;
-                if (ezMonster.AttackDamage - _player.Armor > 0)
-                {
-                    damageTaken = ezMonster.AttackDamage - _player.Armor;
-                }
-
-                combatLabel.Text = "You smashed the monster for " + (_player.AttackDamage - ezMonster.Armor).ToString() + "\n"
-                + "The monster hit you for " + damageTaken.ToString();
-                combatMode.Attack();
-                lblHitPoints.Text = (_player.CurrentHitPoints - damageTaken).ToString();
-                mainTextBox.Text = "Monster HP: "
-                    + ezMonster.HealthPoints.ToString() + "\n"
-                    + "Monster Armor: " + ezMonster.Armor.ToString() + "\n"
-                    + "Monster Damage: " + ezMonster.AttackDamage.ToString();
-
-                //if (ezMonster.HealthPoints <= 0)
-                //{
-                //    combatLabel.Text = "Congrats You won!" + "\n"
-                //        + _rewards.goldReward + " added " + " and" + _rewards.expReward + " added ";
-                //}
-                int damageGiven = 0;
-                if (_player.AttackDamage - ezMonster.Armor > 0)
-                {
-                    damageGiven = _player.AttackDamage - ezMonster.Armor;
-                }
-                // combatLabel.Text = damageGiven.ToString(); fungerar, visar korrekt dmg.
-
-
+                damageTaken = creature.AttackDamage - _player.Armor;
             }
-        }
+            int damageGiven = 0;
+            if (_player.AttackDamage - creature.Armor > 0)
+            {
+                damageGiven -= _player.AttackDamage - creature.Armor;
+            }
 
+            UpdateLabels();
+
+            combatLabel.Text = "You smashed the monster for " + damageGiven.ToString() + "\n"
+           + "The monster hit you for " + damageTaken.ToString();
+
+        }
 
         private void defendButton_Click(object sender, EventArgs e)
         {
-
+         
         }
+
+        private void UpdateLabels()
+        {
+            
+            lblHitPoints.Text = _player.CurrentHitPoints.ToString();
+
+            mainTextBox.Text = "You stumbled on a creature! Fight!" + "\n" + "\n" + "Monster HP: "
+                   + creature.HealthPoints.ToString() + "\n"
+                   + "Monster Armor: " + creature.Armor.ToString() + "\n"
+                   + "Monster Damage: " + creature.AttackDamage.ToString();
+
+
+            string combatString = combatMode.CheckVictory();
+            if (!combatString.Equals(""))
+            {
+                mainTextBox.Text = combatString;
+                attackButton.Visible = false;
+                defendButton.Visible = false;
+            }
+        }
+
+        private void RenderEnemyText()
+        {
+            mainTextBox.Text = "You stumbled on a creature! Fight!" + "\n" + "\n" + "Monster HP: "
+                   + creature.HealthPoints.ToString() + "\n"
+                   + "Monster Armor: " + creature.Armor.ToString() + "\n"
+                   + "Monster Damage: " + creature.AttackDamage.ToString();
+        }
+
     }
 }
-
