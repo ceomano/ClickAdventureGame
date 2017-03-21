@@ -17,13 +17,12 @@ namespace OOP
     {
 
         // Properties
-
-
+        
         private Player.Player _player; //  Player Object
-        public int positionWalked = 0;
+        public int positionWalked = 0; // Position counter for player
         private Reward _rewards; // reward object
-        private Creatures.Creatures creature;
-        private Combat combatMode;
+        private Creatures.Creatures creature; // creature object
+        private Combat combatMode; // combat object
 
         public ClickAdventureBase()
 
@@ -32,7 +31,7 @@ namespace OOP
             InitializeComponent();
 
 
-            // Setting default value
+            // Setting default value for player below
             _player = new Player.Player();
             _player.CurrentHitPoints = 50;
             _player.MaximumHitPoints = 50;
@@ -51,6 +50,7 @@ namespace OOP
             lblLevel.Text = _player.Level.ToString();
             lblWalk.Text = _player.WalkedAmount.ToString();
 
+            // Starting mainbox text
             mainTextBox.Text = "Welcome to the ultimate experience in Click Adventure RPG" + "\n"
                 + "This is how you play:" + "\n"
                 + "- Click" + "\n"
@@ -75,14 +75,14 @@ namespace OOP
             //    mainTextBox.Text = Quest.quests[questHack].questText;
             //}
 
-
+            // if x click is % 4 an encounter will appear with monster.
             if (positionWalked % 4 == 0)
             {
                 creature = new EasyMonster();
                 combatMode = new Combat(creature, _player);
                 RenderEnemyText();
-                //UpdateLabels();
 
+                // show Attack & defend button
                 attackButton.Visible = true;
                 defendButton.Visible = true;
 
@@ -90,6 +90,7 @@ namespace OOP
             }
             else
             {
+                // if encounter is done hide buttons
                 mainTextBox.Text = "";
                 attackButton.Visible = false;
                 defendButton.Visible = false;
@@ -99,34 +100,35 @@ namespace OOP
 
         private void attackButton_Click(object sender, EventArgs e)
         {
+            // attack function from combat object
             combatMode.Attack();
-
-            //int damageTaken = creature.AttackDamage - _player.Armor + 1 > 0 ? creature.AttackDamage - _player.Armor : 0;
-            //int damageGiven = _player.AttackDamage - creature.Armor > 0 ? _player.AttackDamage - creature.Armor : 0;
-
+            
             int damageTaken = 0;
+            // Math for damage taken, will also be updated in label
             if (creature.AttackDamage - _player.Armor > 0)
             {
                 damageTaken = creature.AttackDamage - _player.Armor;
             }
             int damageGiven = 0;
+            // Math for damage done, will also be updated in label
             if (_player.AttackDamage - creature.Armor > 0)
             {
                 damageGiven -= _player.AttackDamage - creature.Armor;
             }
 
+            //label update
             UpdateLabels();
-
+            // comat label
             combatLabel.Text = "You smashed the monster for " + damageGiven.ToString() + "\n"
            + "The monster hit you for " + damageTaken.ToString();
 
         }
-
+        // TODO
         private void defendButton_Click(object sender, EventArgs e)
         {
          
         }
-
+        // update label method
         private void UpdateLabels()
         {
             
@@ -137,7 +139,7 @@ namespace OOP
                    + "Monster Armor: " + creature.Armor.ToString() + "\n"
                    + "Monster Damage: " + creature.AttackDamage.ToString();
 
-
+            // check with checkvictory function if hp from creature is 0. Will also hide buttons
             string combatString = combatMode.CheckVictory();
             if (!combatString.Equals(""))
             {
@@ -146,7 +148,7 @@ namespace OOP
                 defendButton.Visible = false;
             }
         }
-
+        // Update of creatures HP
         private void RenderEnemyText()
         {
             mainTextBox.Text = "You stumbled on a creature! Fight!" + "\n" + "\n" + "Monster HP: "

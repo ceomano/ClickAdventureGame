@@ -47,6 +47,7 @@ namespace OOP.Logic
             quests.Add("Quest 4");
             quests.Add("Quest 5");
             */
+            // test to see the list print out on label, not in use.
             if (quests != null)
             {
                 for (int i = 0; i < quests.Count; i++)
